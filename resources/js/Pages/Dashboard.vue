@@ -93,14 +93,18 @@ const editTaskForm = useForm({
 const editNoteForm = useForm({ title: '', content: '', course_id: '' });
 
 // --- OPTIONS UNTUK PREMIUM SELECT ---
+const activeSemesterCourses = computed(() => {
+    return props.courses.filter(c => Number(c.semester) === props.activeSemester);
+});
+
 const courseOptions = computed(() => [
     { value: '', label: 'Tanpa Mata Kuliah', icon: PhBookBookmark, iconColor: 'text-muted/40' },
-    ...props.courses.map(c => ({ value: c.id, label: c.code || c.name, icon: PhBookBookmark, iconColor: 'text-primary/60' }))
+    ...activeSemesterCourses.value.map(c => ({ value: c.id, label: c.code || c.name, icon: PhBookBookmark, iconColor: 'text-primary/60' }))
 ]);
 
 const noteCourseOptions = computed(() => [
     { value: '', label: 'Catatan Umum (Tanpa Mata Kuliah)', icon: PhNotebook, iconColor: 'text-muted/40' },
-    ...props.courses.map(c => ({ value: c.id, label: c.code || c.name, icon: PhBookBookmark, iconColor: 'text-primary/60' }))
+    ...activeSemesterCourses.value.map(c => ({ value: c.id, label: c.code || c.name, icon: PhBookBookmark, iconColor: 'text-primary/60' }))
 ]);
 
 const statusOptions = [
@@ -608,7 +612,7 @@ const getStatusConfig = (status) => {
                 </div>
                 <div class="flex items-center gap-1 overflow-x-auto w-full sm:w-auto px-2 sm:px-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     <button @click="selectedCourseFilter = ''" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-300" :class="selectedCourseFilter === '' ? 'bg-primary text-inverted shadow-md' : 'bg-transparent text-muted hover:bg-primary/5'">Semua Mata Kuliah</button>
-                    <button v-for="course in courses" :key="course.id" @click="selectedCourseFilter = course.id" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-300" :class="selectedCourseFilter === course.id ? 'bg-primary text-inverted shadow-md' : 'bg-transparent text-muted hover:bg-primary/5'">{{ course.code || course.name }}</button>
+                    <button v-for="course in activeSemesterCourses" :key="course.id" @click="selectedCourseFilter = course.id" class="px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-300" :class="selectedCourseFilter === course.id ? 'bg-primary text-inverted shadow-md' : 'bg-transparent text-muted hover:bg-primary/5'">{{ course.code || course.name }}</button>
                 </div>
             </div>
 
