@@ -1,5 +1,10 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
+
+putenv('APP_DEBUG=true');
+$_ENV['APP_DEBUG'] = 'true';
+$_SERVER['APP_DEBUG'] = 'true';
+
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
 // Adjust paths for Vercel Serverless environment (read-only filesystem)
