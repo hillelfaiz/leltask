@@ -798,9 +798,9 @@ const getStatusConfig = (status) => {
                             <h3 class="font-mono text-xs uppercase tracking-widest text-muted">Mata Kuliah</h3>
                         </div>
                         <div v-if="!activeSemester" class="text-sm text-muted py-2">Pilih semester terlebih dahulu.</div>
-                        <div v-else-if="courses.filter(c => c.semester === activeSemester).length === 0" class="text-sm text-muted py-2">Belum ada mata kuliah di semester ini.</div>
+                        <div v-else-if="activeSemesterCourses.length === 0" class="text-sm text-muted py-2">Belum ada mata kuliah di semester ini.</div>
                         <ul v-else class="flex flex-col gap-2">
-                            <li v-for="course in courses.filter(c => c.semester === activeSemester)" :key="course.id" @click="selectedCourseFilter = selectedCourseFilter === course.id ? '' : course.id" class="flex items-center justify-between group cursor-pointer p-2.5 -mx-2.5 rounded-lg transition-colors" :class="selectedCourseFilter === course.id ? 'bg-primary/5 ring-1 ring-primary/10' : 'hover:bg-primary/5'">
+                            <li v-for="course in activeSemesterCourses" :key="course.id" @click="selectedCourseFilter = selectedCourseFilter === course.id ? '' : course.id" class="flex items-center justify-between group cursor-pointer p-2.5 -mx-2.5 rounded-lg transition-colors" :class="selectedCourseFilter === course.id ? 'bg-primary/5 ring-1 ring-primary/10' : 'hover:bg-primary/5'">
                                 <div class="flex flex-col">
                                     <span class="text-sm font-medium" :class="selectedCourseFilter === course.id ? 'text-primary' : 'text-primary/80'">{{ course.name }}</span>
                                     <span class="text-xs text-muted">{{ course.code }}</span>
@@ -836,8 +836,8 @@ const getStatusConfig = (status) => {
                                 </h4>
                                 <div class="flex flex-col gap-2 pl-3 border-l border-border-subtle">
                                     <!-- JIKA ADA MATA KULIAH -->
-                                    <template v-if="courses.some(c => c.semester === activeSemester && c.schedule_day === day)">
-                                        <div v-for="course in courses.filter(c => c.semester === activeSemester && c.schedule_day === day).sort((a,b) => (a.schedule_time_start || '').localeCompare(b.schedule_time_start || ''))" :key="course.id" class="flex flex-col gap-1 p-2 rounded-lg hover:bg-primary/5 transition-colors cursor-pointer text-left">
+                                    <template v-if="activeSemesterCourses.some(c => c.schedule_day === day)">
+                                        <div v-for="course in activeSemesterCourses.filter(c => c.schedule_day === day).sort((a,b) => (a.schedule_time_start || '').localeCompare(b.schedule_time_start || ''))" :key="course.id" class="flex flex-col gap-1 p-2 rounded-lg hover:bg-primary/5 transition-colors cursor-pointer text-left">
                                             <div class="flex items-center justify-between">
                                                 <span class="text-sm font-medium text-primary line-clamp-1">{{ course.name }}</span>
                                                 <span class="text-[10px] font-mono text-muted whitespace-nowrap ml-2 bg-primary/5 px-1.5 py-0.5 rounded">{{ course.schedule_time_start }} - {{ course.schedule_time_end }}</span>
