@@ -81,7 +81,7 @@ const editorEditRef = ref(null);
 // --- FORMS ---
 const taskForm = useForm({ title: '', description: '', course_id: '', priority: 'medium', due_date: '', status: 'todo', attachment: null });
 const courseForm = useForm({ 
-    name: '', code: '', semester: props.activeSemester || 1,
+    name: '', code: '', semester: '',
     schedule_day: '', schedule_time_start: '', schedule_time_end: '', room: ''
 });
 const noteForm = useForm({ title: '', content: '', course_id: '' });
@@ -1155,6 +1155,7 @@ const getStatusConfig = (status) => {
                                 :options="[1,2,3,4,5,6,7,8].map(s => ({ value: s, label: `Semester ${s}`, icon: PhGraduationCap, iconColor: 'text-primary' }))" 
                                 placeholder="Pilih Semester" 
                             />
+                            <span v-if="courseForm.errors.semester" class="text-xs text-pastel-red-text">{{ courseForm.errors.semester }}</span>
                         </div>
                         <div class="flex flex-col gap-1.5">
                             <label class="font-mono text-[10px] uppercase tracking-widest text-muted">Kode Mata Kuliah</label>

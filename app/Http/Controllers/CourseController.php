@@ -14,11 +14,13 @@ class CourseController extends Controller
             'code' => 'nullable|string|max:50',
             'lecturer' => 'nullable|string|max:255',
             'color_theme' => 'nullable|string|max:50',
-            'semester' => 'nullable|integer|min:1|max:8',
+            'semester' => 'required|integer|min:1|max:8',
             'schedule_day' => 'nullable|string|max:20',
             'schedule_time_start' => 'nullable|string|max:10',
             'schedule_time_end' => 'nullable|string|max:10',
             'room' => 'nullable|string|max:100',
+        ], [
+            'semester.required' => 'Pilih semester terlebih dahulu.',
         ]);
 
         $request->user()->courses()->create($validated);
@@ -37,11 +39,13 @@ class CourseController extends Controller
             'code' => 'nullable|string|max:50',
             'lecturer' => 'nullable|string|max:255',
             'color_theme' => 'nullable|string|max:50',
-            'semester' => 'nullable|integer|min:1|max:8',
+            'semester' => 'required|integer|min:1|max:8',
             'schedule_day' => 'nullable|string|max:20',
             'schedule_time_start' => 'nullable|string|max:10',
             'schedule_time_end' => 'nullable|string|max:10',
             'room' => 'nullable|string|max:100',
+        ], [
+            'semester.required' => 'Pilih semester terlebih dahulu.',
         ]);
 
         $course->update($validated);
