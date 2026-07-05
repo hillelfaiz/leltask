@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-// Mengarahkan seluruh request Vercel ke file index Laravel yang asli
 require __DIR__ . '/../public/index.php';
