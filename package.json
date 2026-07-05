@@ -23,6 +23,7 @@
         "@tailwindcss/vite": "^4.3.2",
         "axios": "^1.18.1",
         "marked": "^18.0.5",
-        "tailwindcss": "^4.3.2"
+        "tailwindcss": "^4.3.2",
+        "ziggy-js": "^2.6.3"
     }
 }
