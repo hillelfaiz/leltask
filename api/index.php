@@ -1,5 +1,23 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require __DIR__ . '/../vendor/autoload.php';
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 
-require __DIR__ . '/../public/index.php';
+// Adjust paths for Vercel Serverless environment (read-only filesystem)
+$app->useStoragePath('/tmp/storage');
+$app->useBootstrapPath('/tmp/bootstrap');
+
+// Create required directories in /tmp
+$dirs = [
+    '/tmp/storage/framework/views',
+    '/tmp/storage/framework/cache/data',
+    '/tmp/storage/framework/sessions',
+    '/tmp/storage/logs',
+    '/tmp/bootstrap/cache',
+];
+foreach ($dirs as $dir) {
+    if (!is_dir($dir)) {
+        mkdir($dir, 0777, true);
+    }
+}
+
+$app->handleRequest(Illuminate\Http\Request::capture());
