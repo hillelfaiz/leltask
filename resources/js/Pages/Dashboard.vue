@@ -638,13 +638,13 @@ const getStatusConfig = (status) => {
                                     </button>
                                     
                                     <div v-if="activeStatusDropdownId === task.id" class="absolute left-0 top-full mt-2 w-48 rounded-xl bg-surface ring-1 ring-border-subtle shadow-2xl z-[70] py-1 flex flex-col animate-fade-in-up" style="animation-duration: 0.2s">
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'todo')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'todo')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhCircle :size="16" class="text-muted" /> <span class="text-primary font-medium">Belum Dikerjakan</span>
                                         </button>
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'in_progress')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'in_progress')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhDotsThreeCircle :size="16" class="text-pastel-blue-text" weight="fill" /> <span class="text-primary font-medium">Sedang Dikerjakan</span>
                                         </button>
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'done')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'done')" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhCheckCircle :size="16" class="text-pastel-green-text" weight="fill" /> <span class="text-primary font-medium">Selesai</span>
                                         </button>
                                     </div>
@@ -683,13 +683,13 @@ const getStatusConfig = (status) => {
                                     
                                     <div v-show="activeMenuDropdownId === task.id" class="absolute right-0 top-full mt-2 w-48 rounded-xl bg-surface ring-1 ring-border-subtle shadow-2xl z-[70] py-2 flex flex-col">
                                         <div class="px-4 py-1 text-[10px] font-mono uppercase tracking-widest text-muted mb-1">Ubah Status</div>
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'todo')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'todo')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhCircle :size="16" class="text-muted" /> <span class="text-primary font-medium">Belum Dikerjakan</span>
                                         </button>
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'in_progress')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'in_progress')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhDotsThreeCircle :size="16" class="text-pastel-blue-text" weight="fill" /> <span class="text-primary font-medium">Sedang Dikerjakan</span>
                                         </button>
-                                        <button type="button" @click.stop="updateTaskStatus(task, 'done')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
+                                        <button type="button" @click.stop.prevent="updateTaskStatus(task, 'done')" class="flex items-center gap-3 px-4 py-2 text-sm hover:bg-primary/5 transition-colors w-full text-left cursor-pointer">
                                             <PhCheckCircle :size="16" class="text-pastel-green-text" weight="fill" /> <span class="text-primary font-medium">Selesai</span>
                                         </button>
                                         
@@ -936,7 +936,7 @@ const getStatusConfig = (status) => {
         <!-- MODAL: CREATE TASK -->
         <div v-if="isTaskModalOpen" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center px-0 md:px-4 pb-0 md:py-6">
             <div @click="isTaskModalOpen = false" class="absolute inset-0 bg-canvas/60 backdrop-blur-md transition-opacity"></div>
-            <div class="relative w-full max-w-lg bg-surface md:bg-shell p-0 md:p-1.5 md:ring-1 md:ring-shell-ring shadow-2xl rounded-t-[1.5rem] md:rounded-[1.5rem] animate-fade-in-up mt-auto md:my-auto max-h-[90vh] flex flex-col">
+            <div class="relative z-10 w-full max-w-lg bg-surface md:bg-shell p-0 md:p-1.5 md:ring-1 md:ring-shell-ring shadow-2xl rounded-t-[1.5rem] md:rounded-[1.5rem] animate-fade-in-up mt-auto md:my-auto max-h-[90vh] flex flex-col pointer-events-auto select-auto">
                 <div class="md:rounded-[calc(1.5rem-0.375rem)] bg-surface md:ring-1 md:ring-border-subtle p-6 md:p-8 flex-1 overflow-y-auto custom-scrollbar rounded-t-[1.5rem]">
                     <div class="flex items-center justify-between mb-6 border-b border-border-subtle pb-4">
                         <h2 class="font-mono text-[10px] uppercase tracking-widest text-muted">Tugas Baru</h2>
