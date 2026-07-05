@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 import PremiumCard from '@/Components/PremiumCard.vue';
 import PremiumButton from '@/Components/PremiumButton.vue';
@@ -33,6 +33,14 @@ const toggleTheme = () => {
     }
 };
 
+const closeDropdowns = () => {
+    // This function will be attached to document click event
+    // When clicking anywhere outside, close dropdowns. 
+    // Buttons that open them have @click.stop, so they won't trigger this immediately.
+    activeStatusDropdownId.value = null;
+    activeMenuDropdownId.value = null;
+};
+
 onMounted(() => {
     if (localStorage.theme === 'dark') {
         isDark.value = true;
@@ -41,6 +49,11 @@ onMounted(() => {
         isDark.value = false;
         document.documentElement.classList.remove('dark');
     }
+    document.addEventListener('click', closeDropdowns);
+});
+
+onUnmounted(() => {
+    document.removeEventListener('click', closeDropdowns);
 });
 
 // --- STATE MANAJEMEN MODAL & TABS ---
@@ -552,8 +565,7 @@ const getStatusConfig = (status) => {
 <template>
     <Head title="Ruang Kerja" />
 
-    <!-- OVERLAY GLOBAL -->
-    <div v-if="activeStatusDropdownId || activeMenuDropdownId" @click="activeStatusDropdownId = null; activeMenuDropdownId = null" class="fixed inset-0 z-[40] bg-transparent"></div>
+    <!-- Empty spacer where overlay used to be, to keep template structure intact -->
 
     <div class="min-h-screen bg-canvas text-primary selection:bg-primary/20 transition-colors duration-500 pb-20 md:pb-0">
         
