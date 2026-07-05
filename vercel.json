@@ -8,6 +8,10 @@
   },
   "routes": [
     {
+      "src": "/info",
+      "dest": "/api/info.php"
+    },
+    {
       "src": "/build/(.*)",
       "dest": "/public/build/$1"
     },
