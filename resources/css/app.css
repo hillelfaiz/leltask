@@ -1,0 +1,89 @@
+@import "tailwindcss/index.css";
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-mono/400.css";
+
+@theme {
+  --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Semantic Tokens */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-inverted: var(--inverted);
+  --color-muted: var(--muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-shell: var(--shell);
+  --color-shell-ring: var(--shell-ring);
+
+  /* Semantic Pastels */
+  --color-pastel-red-bg: var(--pastel-red-bg);
+  --color-pastel-red-text: var(--pastel-red-text);
+  --color-pastel-blue-bg: var(--pastel-blue-bg);
+  --color-pastel-blue-text: var(--pastel-blue-text);
+  --color-pastel-green-bg: var(--pastel-green-bg);
+  --color-pastel-green-text: var(--pastel-green-text);
+  --color-pastel-yellow-bg: var(--pastel-yellow-bg);
+  --color-pastel-yellow-text: var(--pastel-yellow-text);
+}
+
+@layer base {
+  /* LIGHT MODE (Default) */
+  :root {
+    --canvas: #FBFBFA;
+    --surface: #FFFFFF;
+    --primary: #111111;
+    --inverted: #FFFFFF;
+    --muted: #787774;
+    --border-subtle: #EAEAEA;
+    --shell: rgba(0, 0, 0, 0.02);
+    --shell-ring: rgba(0, 0, 0, 0.04);
+
+    --pastel-red-bg: #FDEBEC;
+    --pastel-red-text: #9F2F2D;
+    --pastel-blue-bg: #E1F3FE;
+    --pastel-blue-text: #1F6C9F;
+    --pastel-green-bg: #EDF3EC;
+    --pastel-green-text: #346538;
+    --pastel-yellow-bg: #FBF3DB;
+    --pastel-yellow-text: #956400;
+  }
+
+  /* DARK MODE (Slate/Zinc Theme — Cerah dan Lembut) */
+  .dark {
+    --canvas: #18181B;     /* Zinc 900 - Abu-abu gelap, bukan hitam */
+    --surface: #27272A;    /* Zinc 800 - Lebih terang untuk kartu */
+    --primary: #F4F4F5;    /* Zinc 100 - Putih tulang untuk teks utama */
+    --inverted: #18181B;
+    --muted: #A1A1AA;      /* Zinc 400 - Teks sekunder yang sangat jelas */
+    --border-subtle: #3F3F46; /* Zinc 700 - Garis batas yang lebih tegas */
+    --shell: rgba(255, 255, 255, 0.08);
+    --shell-ring: rgba(255, 255, 255, 0.12);
+
+    --pastel-red-bg: #2A1215;
+    --pastel-red-text: #F87171;
+    --pastel-blue-bg: #101B2B;
+    --pastel-blue-text: #60A5FA;
+    --pastel-green-bg: #112318;
+    --pastel-green-text: #4ADE80;
+    --pastel-yellow-bg: #2B2011;
+    --pastel-yellow-text: #FACC15;
+  }
+
+  body {
+    @apply bg-canvas text-primary font-sans antialiased selection:bg-primary selection:text-inverted transition-colors duration-500;
+  }
+  
+  input, textarea, select {
+    @apply outline-none focus:ring-0;
+    color-scheme: light dark;
+  }
+}
+
+@layer utilities {
+  .ease-spring {
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
