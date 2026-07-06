@@ -52,63 +52,6 @@ const getDaysUntilDeadline = (dueDateStr) => {
     return Math.ceil((due - now) / (1000 * 60 * 60 * 24));
 };
 
-const urgentTasks = computed(() => {
-    return props.tasks.filter(t => {
-        if (t.status === 'done') return false;
-        if (!t.due_date) return false;
-        const days = getDaysUntilDeadline(t.due_date);
-        return days <= 1; // Deadline hari ini atau besok atau sudah lewat
-    });
-});
-
-const showDeadlineBanner = ref(false);
-
-const sendBrowserNotifications = () => {
-    if (!('Notification' in window)) return;
-    
-    const tasksToNotify = urgentTasks.value;
-    if (tasksToNotify.length === 0) return;
-    
-    // Cek apakah sudah pernah notif hari ini (agar tidak spam saat refresh)
-    const today = new Date().toDateString();
-    const lastNotifDate = localStorage.getItem('lastDeadlineNotif');
-    if (lastNotifDate === today) {
-        // Tetap tampilkan banner, tapi jangan kirim notif browser lagi
-        showDeadlineBanner.value = true;
-        return;
-    }
-    
-    if (Notification.permission === 'granted') {
-        // Kirim notifikasi
-        tasksToNotify.forEach(task => {
-            const days = getDaysUntilDeadline(task.due_date);
-            let body = '';
-            if (days < 0) body = `Sudah lewat ${Math.abs(days)} hari!`;
-            else if (days === 0) body = 'Deadline HARI INI!';
-            else body = 'Deadline besok!';
-            
-            new Notification('⚠️ ' + task.title, {
-                body: body + (task.course ? ` (${task.course.code || task.course.name})` : ''),
-                icon: '/favicon.ico',
-                tag: `deadline-${task.id}`, // Mencegah duplikasi
-            });
-        });
-        localStorage.setItem('lastDeadlineNotif', today);
-        showDeadlineBanner.value = true;
-    } else if (Notification.permission !== 'denied') {
-        // Minta izin
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                sendBrowserNotifications(); // Panggil ulang setelah diizinkan
-            }
-        });
-        showDeadlineBanner.value = true; // Tetap tampilkan banner
-    } else {
-        // Jika user menolak notifikasi browser, tetap tampilkan banner
-        showDeadlineBanner.value = true;
-    }
-};
-
 onMounted(() => {
     if (localStorage.theme === 'dark') {
         isDark.value = true;
@@ -118,11 +61,6 @@ onMounted(() => {
         document.documentElement.classList.remove('dark');
     }
     document.addEventListener('click', closeDropdowns);
-    
-    // Cek deadline dan kirim notifikasi
-    nextTick(() => {
-        sendBrowserNotifications();
-    });
 });
 
 onUnmounted(() => {
@@ -690,30 +628,7 @@ const getStatusConfig = (status) => {
                 </p>
             </header>
 
-            <!-- DEADLINE WARNING BANNER -->
-            <div v-if="showDeadlineBanner && urgentTasks.length > 0" class="mb-6 rounded-2xl ring-1 ring-pastel-red-text/20 bg-pastel-red-bg/50 p-4 md:p-5 animate-fade-in-up">
-                <div class="flex items-start gap-3">
-                    <div class="shrink-0 mt-0.5">
-                        <PhBellRinging :size="20" weight="fill" class="text-pastel-red-text animate-pulse" />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-sm font-semibold text-pastel-red-text mb-1">Peringatan Deadline!</h3>
-                        <p class="text-xs text-pastel-red-text/80 mb-2">{{ urgentTasks.length }} tugas mendekati atau sudah melewati tenggat waktu:</p>
-                        <ul class="flex flex-col gap-1.5">
-                            <li v-for="task in urgentTasks" :key="task.id" class="flex items-center gap-2 text-xs">
-                                <PhWarning :size="14" weight="fill" class="text-pastel-red-text shrink-0" />
-                                <span class="font-medium text-primary truncate">{{ task.title }}</span>
-                                <span class="text-pastel-red-text/70 shrink-0">
-                                    — {{ getDaysUntilDeadline(task.due_date) < 0 ? `Lewat ${Math.abs(getDaysUntilDeadline(task.due_date))} hari` : getDaysUntilDeadline(task.due_date) === 0 ? 'Hari ini!' : 'Besok!' }}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button @click="showDeadlineBanner = false" class="shrink-0 text-pastel-red-text/50 hover:text-pastel-red-text transition-colors">
-                        <PhX :size="16" />
-                    </button>
-                </div>
-            </div>
+
             <div class="mb-10 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-surface p-2 rounded-2xl ring-1 ring-border-subtle shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-colors duration-500 relative z-30">
                 <div class="relative w-full sm:max-w-xs shrink-0">
                     <PhMagnifyingGlass class="absolute left-3 top-1/2 -translate-y-1/2 text-muted" :size="16" />
@@ -780,10 +695,6 @@ const getStatusConfig = (status) => {
                                         <div class="flex items-center gap-2">
                                             <span class="text-base font-medium text-primary leading-snug">{{ task.title }}</span>
                                             <span v-if="task.status === 'in_progress'" class="rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest bg-pastel-blue-bg text-pastel-blue-text">Proses</span>
-                                        </div>
-                                        <span v-if="task.priority && task.priority !== 'medium'" class="shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider ring-1" :class="getPriorityConfig(task.priority).style">
-                                            {{ getPriorityConfig(task.priority).label }}
-                                        </span>
                                     </div>
                                     <p v-if="task.description" class="text-sm text-muted line-clamp-2 leading-relaxed break-words">{{ task.description }}</p>
                                     
@@ -798,6 +709,9 @@ const getStatusConfig = (status) => {
                                         </span>
                                         <span v-if="task.attachment_name" class="flex items-center gap-1.5 px-2 py-1 rounded-md bg-primary/5 text-muted max-w-[150px] truncate">
                                             <PhPaperclip :size="14" class="shrink-0" /> <span class="truncate">{{ task.attachment_name }}</span>
+                                        </span>
+                                        <span v-if="task.priority" class="flex items-center gap-1.5 text-muted bg-primary/5 px-2 py-1 rounded-md">
+                                            Prioritas: {{ getPriorityConfig(task.priority).label }}
                                         </span>
                                     </div>
                                 </div>
