@@ -340,22 +340,34 @@ const downloadPdf = () => {
             <head>
                 <title>${viewNoteData.value.title}</title>
                 <style>
-                    body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding: 40px; color: #000; line-height: 1.6; }
+                    body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; padding: 40px; color: #111; line-height: 1.75; font-size: 15px; }
                     h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
                     .course-badge { display: inline-block; font-size: 11px; padding: 4px 8px; background: #f3f4f6; border-radius: 9999px; margin-bottom: 24px; font-weight: 500; border: 1px solid #e5e7eb; }
-                    .content { margin-top: 20px; font-size: 14px; }
-                    h2 { font-size: 18px; margin-top: 24px; font-weight: 600; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
-                    h3 { font-size: 16px; margin-top: 20px; font-weight: 600; }
-                    p { margin-bottom: 16px; }
-                    ul, ol { margin-bottom: 16px; padding-left: 24px; }
-                    li { margin-bottom: 8px; }
-                    strong { font-weight: 600; }
+                    .content h2 { font-size: 20px; margin-top: 28px; font-weight: 600; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; margin-bottom: 8px; }
+                    .content h3 { font-size: 17.5px; margin-top: 24px; font-weight: 600; margin-bottom: 6px; }
+                    .content p { margin-bottom: 16px; }
+                    .content ol { list-style-type: decimal; padding-left: 24px; margin-top: 8px; margin-bottom: 16px; }
+                    .content ol ol { list-style-type: lower-alpha; }
+                    .content ul { list-style-type: disc; padding-left: 24px; margin-top: 8px; margin-bottom: 16px; }
+                    .content ul ul { list-style-type: circle; }
+                    .content li { margin-bottom: 8px; padding-left: 4px; }
+                    .content strong, .content b { font-weight: 600; }
+                    .content em, .content i { font-style: italic; }
+                    .content blockquote { border-left: 3px solid #e5e7eb; padding-left: 16px; margin: 16px 0; color: #787774; font-style: italic; }
+                    .content code { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85em; background: #f3f4f6; padding: 2px 5px; border-radius: 4px; }
+                    .content pre { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 16px 0; }
+                    .content pre code { background: transparent; padding: 0; }
+                    .content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+                    .content th, .content td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
+                    .content th { font-weight: 600; background: #f9fafb; }
+                    .content hr { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
+                    .content > div { margin-bottom: 6px; }
                 </style>
             </head>
             <body>
                 <h1>${viewNoteData.value.title}</h1>
                 ${viewNoteData.value.course ? `<div class="course-badge">${viewNoteData.value.course.code || viewNoteData.value.course.name}</div>` : ''}
-                <div class="content">${viewNoteData.value.content}</div>
+                <div class="content">${renderedNoteContent.value}</div>
             </body>
         </html>
     `);
@@ -601,7 +613,7 @@ const getStatusConfig = (status) => {
             <header class="mb-8 max-w-2xl">
                 <h1 class="text-4xl font-medium tracking-tight text-primary md:text-5xl">Kerjain sekarang, takut besok lupa.</h1>
                 <p class="mt-4 text-lg text-muted leading-relaxed">
-                    Saya memiliki <strong class="font-medium text-primary">{{ props.tasks.filter(t => t.status !== 'done').length }} tugas aktif</strong> dan <strong class="font-medium text-primary">{{ props.notes.length }} catatan</strong>.
+                    Saya memiliki <strong class="font-medium text-primary">{{ activeTasks.length }} tugas aktif</strong> dan <strong class="font-medium text-primary">{{ filteredNotes.length }} catatan</strong>.
                 </p>
             </header>
 
@@ -1041,7 +1053,7 @@ const getStatusConfig = (status) => {
                                 contenteditable="true"
                                 data-placeholder="Ketik catatan disini"
                                 @input="e => noteForm.content = e.target.innerHTML"
-                                class="prose prose-sm md:prose-base prose-zinc dark:prose-invert max-w-none w-full flex-1 border-0 bg-transparent py-2 text-primary focus:ring-0 px-0 resize-none outline-none overflow-y-auto min-h-[150px]"
+                                class="note-content flex-1 border-0 bg-transparent py-2 focus:ring-0 px-0 resize-none outline-none overflow-y-auto min-h-[150px]"
                                 :class="{'opacity-50 cursor-not-allowed': isAILoading}"
                                 :contenteditable="!isAILoading"
                             ></div>
@@ -1092,7 +1104,7 @@ const getStatusConfig = (status) => {
                             </div>
                             
                             <!-- RENDER HTML MENTAH -->
-                            <div class="prose prose-sm md:prose-base prose-zinc dark:prose-invert max-w-none w-full text-primary/80 break-words" v-html="renderedNoteContent"></div>
+                            <div class="note-content" v-html="renderedNoteContent"></div>
                         </div>
                     </div>
 
@@ -1123,7 +1135,7 @@ const getStatusConfig = (status) => {
                                 contenteditable="true"
                                 data-placeholder="Ketik tambahan catatan kasar Anda di sini..."
                                 @input="e => editNoteForm.content = e.target.innerHTML"
-                                class="prose prose-sm md:prose-base prose-zinc dark:prose-invert max-w-none w-full flex-1 border-0 bg-transparent py-2 text-primary focus:ring-0 px-0 resize-none outline-none overflow-y-auto min-h-[150px]"
+                                class="note-content flex-1 border-0 bg-transparent py-2 focus:ring-0 px-0 resize-none outline-none overflow-y-auto min-h-[150px]"
                                 :class="{'opacity-50 cursor-not-allowed': isAILoading}"
                                 :contenteditable="!isAILoading"
                             ></div>
