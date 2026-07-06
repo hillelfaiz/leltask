@@ -20,6 +20,12 @@ class Task extends Model
         'is_notified' => 'boolean',
     ];
 
+    // Hide heavy columns from JSON to prevent Vercel Payload Too Large error
+    protected $hidden = [
+        'attachment_content', 
+        'attachment_type'
+    ];
+
     // Accessor untuk mendapatkan URL file secara langsung
     protected $appends = ['attachment_url'];
 
