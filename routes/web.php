@@ -16,7 +16,8 @@ Route::get('/', function () {
 Route::get('/run-migrations', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return 'Migrations completed successfully! You can close this tab now.';
+        $output = \Illuminate\Support\Facades\Artisan::output();
+        return nl2br("Migrations execution finished.\nOutput:\n" . $output);
     } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
     }
