@@ -1069,7 +1069,7 @@ const getStatusConfig = (status) => {
 
         <!-- MODAL: VIEW & EDIT NOTE -->
         <div v-if="viewNoteData" class="fixed inset-0 z-[100] flex items-end md:items-center justify-center px-0 md:px-4 pb-0 md:py-6">
-            <div @click="viewNoteData = null" class="absolute inset-0 bg-canvas/60 backdrop-blur-md transition-opacity"></div>
+            <div @click="viewNoteData = null" class="absolute inset-0 bg-canvas/80 transition-opacity"></div>
             
             <div class="relative w-full max-w-4xl bg-surface md:bg-shell p-0 md:p-1.5 md:ring-1 md:ring-shell-ring shadow-2xl rounded-t-[1.5rem] md:rounded-[1.5rem] animate-fade-in-up mt-auto md:my-auto max-h-[95vh] md:max-h-[90vh] flex flex-col">
                 <div class="md:rounded-[calc(1.5rem-0.375rem)] bg-surface md:ring-1 md:ring-border-subtle p-5 md:p-8 flex flex-col min-h-[75vh] md:min-h-[75vh] h-full rounded-t-[1.5rem]">
@@ -1094,7 +1094,7 @@ const getStatusConfig = (status) => {
                     </div>
 
                     <!-- MODE BACA (VIEW) -->
-                    <div v-if="!isEditingNote" class="flex flex-col flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                    <div v-if="!isEditingNote" class="flex flex-col flex-1 overflow-y-auto pr-2 custom-scrollbar" style="will-change: transform; -webkit-overflow-scrolling: touch;">
                         <div id="note-print-container" class="bg-surface text-primary p-2">
                             <div class="flex items-center gap-3 mb-6">
                                 <h1 class="text-3xl font-medium text-primary leading-tight">{{ viewNoteData.title }}</h1>
@@ -1235,50 +1235,4 @@ const getStatusConfig = (status) => {
     display: block;
 }
 
-/* CSS PROSE (WYSIWYG) */
-.prose {
-    white-space: normal !important;
-    word-wrap: break-word !important;
-}
-.prose p, .prose div {
-    display: block !important;
-    margin-bottom: 0.75rem !important;
-}
-.prose p:last-child {
-    margin-bottom: 0 !important;
-}
-.prose ul {
-    display: block !important;
-    list-style-type: disc !important;
-    padding-left: 1.5rem !important;
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.75rem !important;
-}
-.prose ol {
-    display: block !important;
-    list-style-type: decimal !important;
-    padding-left: 1.5rem !important;
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.75rem !important;
-}
-.prose li {
-    display: list-item !important;
-    margin-bottom: 0.5rem !important;
-    line-height: 1.7 !important;
-}
-/* Nested ul di dalam ol (sub-bullet dalam item bernomor) */
-.prose ol > li > ul,
-.prose li > ul {
-    margin-top: 0.35rem !important;
-    margin-bottom: 0.35rem !important;
-    padding-left: 1.25rem !important;
-}
-.prose ol > li > ul > li,
-.prose li > ul > li {
-    margin-bottom: 0.3rem !important;
-}
-.prose strong {
-    font-weight: 600 !important;
-    color: inherit !important;
-}
 </style>
