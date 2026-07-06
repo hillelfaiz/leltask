@@ -634,10 +634,10 @@ const formatFullDate = () => {
 
 const getPriorityConfig = (priority) => {
     switch(priority) {
-        case 'high': return { icon: PhFlag, color: 'text-pastel-red-text', bg: 'bg-pastel-red-bg', label: 'Tinggi' };
-        case 'medium': return { icon: PhFlag, color: 'text-pastel-yellow-text', bg: 'bg-pastel-yellow-bg', label: 'Sedang' };
-        case 'low': return { icon: PhFlag, color: 'text-pastel-blue-text', bg: 'bg-pastel-blue-bg', label: 'Rendah' };
-        default: return { icon: PhFlag, color: 'text-muted', bg: 'bg-primary/5', label: 'Tidak ada' };
+        case 'high': return { label: 'Tinggi', style: 'text-primary/70 ring-primary/15' };
+        case 'medium': return { label: 'Sedang', style: 'text-muted ring-border-subtle' };
+        case 'low': return { label: 'Rendah', style: 'text-muted/60 ring-border-subtle/60' };
+        default: return { label: '', style: 'text-muted/40 ring-border-subtle/30' };
     }
 };
 
@@ -781,8 +781,7 @@ const getStatusConfig = (status) => {
                                             <span class="text-base font-medium text-primary leading-snug">{{ task.title }}</span>
                                             <span v-if="task.status === 'in_progress'" class="rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest bg-pastel-blue-bg text-pastel-blue-text">Proses</span>
                                         </div>
-                                        <span class="shrink-0 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider" :class="[getPriorityConfig(task.priority).bg, getPriorityConfig(task.priority).color]">
-                                            <component :is="getPriorityConfig(task.priority).icon" :size="10" weight="fill" />
+                                        <span v-if="task.priority && task.priority !== 'medium'" class="shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider ring-1" :class="getPriorityConfig(task.priority).style">
                                             {{ getPriorityConfig(task.priority).label }}
                                         </span>
                                     </div>
