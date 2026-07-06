@@ -695,6 +695,7 @@ const getStatusConfig = (status) => {
                                         <div class="flex items-center gap-2">
                                             <span class="text-base font-medium text-primary leading-snug">{{ task.title }}</span>
                                             <span v-if="task.status === 'in_progress'" class="rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest bg-pastel-blue-bg text-pastel-blue-text">Proses</span>
+                                        </div>
                                     </div>
                                     <p v-if="task.description" class="text-sm text-muted line-clamp-2 leading-relaxed break-words">{{ task.description }}</p>
                                     
