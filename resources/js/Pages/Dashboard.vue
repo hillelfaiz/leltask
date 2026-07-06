@@ -127,7 +127,7 @@ const statusOptions = [
 
 const createStatusOptions = [
     { value: 'todo', label: 'Belum Dikerjakan', icon: PhCircle, iconColor: 'text-muted', iconWeight: 'light' },
-    { value: 'in_progress', label: 'Proses', icon: PhDotsThreeCircle, iconColor: 'text-pastel-blue-text', iconWeight: 'fill' },
+    { value: 'in_progress', label: 'Sedang Dikerjakan', icon: PhDotsThreeCircle, iconColor: 'text-pastel-blue-text', iconWeight: 'fill' },
 ];
 
 const priorityOptions = [
@@ -583,7 +583,7 @@ const getPriorityConfig = (priority) => {
 const getStatusConfig = (status) => {
     switch(status) {
         case 'todo': return { icon: PhCircle, color: 'text-muted', bg: 'bg-primary/5', label: 'Belum Dikerjakan', weight: 'light' };
-        case 'in_progress': return { icon: PhDotsThreeCircle, color: 'text-pastel-blue-text', bg: 'bg-pastel-blue-bg', label: 'Proses', weight: 'fill' };
+        case 'in_progress': return { icon: PhDotsThreeCircle, color: 'text-pastel-blue-text', bg: 'bg-pastel-blue-bg', label: 'Sedang Dikerjakan', weight: 'fill' };
         case 'done': return { icon: PhCheckCircle, color: 'text-pastel-green-text', bg: 'bg-pastel-green-bg', label: 'Selesai', weight: 'fill' };
         default: return { icon: PhCircle, color: 'text-muted', bg: 'bg-primary/5', label: 'Belum Dikerjakan', weight: 'light' };
     }
@@ -695,7 +695,7 @@ const getStatusConfig = (status) => {
                                     <div class="flex items-start justify-between gap-4">
                                         <div class="flex items-center gap-2">
                                             <span class="text-base font-medium text-primary leading-snug">{{ task.title }}</span>
-                                            <span v-if="task.status === 'in_progress'" class="rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest bg-pastel-blue-bg text-pastel-blue-text">Proses</span>
+                                            <span v-if="task.status === 'in_progress'" class="rounded-full px-2 py-0.5 text-[9px] font-mono uppercase tracking-widest bg-pastel-blue-bg text-pastel-blue-text">Sedang Dikerjakan</span>
                                         </div>
                                     </div>
                                     <p v-if="task.description" class="text-sm text-muted line-clamp-2 leading-relaxed break-words">{{ task.description }}</p>
