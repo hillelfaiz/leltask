@@ -20,7 +20,7 @@ const submit = () => {
         <Head title="Daftar" />
 
         <div class="mb-10 text-center">
-            <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-primary mb-3">Buat ruang kerja.</h1>
+            <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-primary mb-3">Buat <span class="italic">workspace</span>.</h1>
             <p class="text-muted text-sm">Siapkan pengelola lelTask pribadi Anda.</p>
         </div>
 

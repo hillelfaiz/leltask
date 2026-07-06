@@ -32,7 +32,7 @@ const submit = () => {
 
         <div class="mb-10 text-center">
             <h1 class="text-3xl md:text-4xl font-medium tracking-tight text-primary mb-3">Selamat datang kembali.</h1>
-            <p class="text-muted text-sm">Masukkan kredensial Anda untuk mengakses ruang kerja.</p>
+            <p class="text-muted text-sm">Masukkan akun Anda untuk mengakses <span class="italic">workspace</span>.</p>
         </div>
 
         <PremiumCard padding="p-8">
