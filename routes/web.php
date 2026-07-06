@@ -12,6 +12,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// TEMPORARY: Route to run migrations on Vercel/TiDB
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return 'Migrations completed successfully! You can close this tab now.';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
