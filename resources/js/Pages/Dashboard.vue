@@ -966,9 +966,9 @@ const getStatusConfig = (status) => {
             <div @click="isTaskModalOpen = false" class="absolute inset-0 bg-canvas/60 backdrop-blur-md transition-opacity"></div>
             <div class="relative z-10 w-full max-w-lg bg-surface md:bg-shell p-0 md:p-1.5 md:ring-1 md:ring-shell-ring shadow-2xl rounded-t-[1.5rem] md:rounded-[1.5rem] animate-fade-in-up mt-auto md:my-auto max-h-[90vh] flex flex-col pointer-events-auto select-auto">
                 <div class="md:rounded-[calc(1.5rem-0.375rem)] bg-surface md:ring-1 md:ring-border-subtle p-6 md:p-8 flex-1 overflow-y-auto custom-scrollbar rounded-t-[1.5rem]">
-                    <div class="flex items-center justify-between mb-6 border-b border-border-subtle pb-4">
-                        <h2 class="font-mono text-[10px] uppercase tracking-widest text-muted">Tugas Baru</h2>
-                        <button @click="isTaskModalOpen = false" class="text-muted hover:text-primary transition-colors"><PhX :size="20" /></button>
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-lg font-medium text-primary">Tugas Baru</h2>
+                        <button @click="isTaskModalOpen = false" class="text-muted hover:text-primary transition-colors"><PhX :size="18" /></button>
                     </div>
                     <form @submit.prevent="submitTask" class="flex flex-col gap-5">
                         <div class="flex flex-col gap-1.5">
