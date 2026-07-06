@@ -50,11 +50,22 @@ class ApiDataController extends Controller
             'status' => 'required|in:todo,in_progress,review,done',
             'priority' => 'required|in:low,medium,high',
             'due_date' => 'nullable|date',
+            'attachment' => 'nullable|file|max:10240',
         ]);
 
-        $task = $request->user()->tasks()->create($validated);
+        $taskData = collect($validated)->except('attachment')->toArray();
+        $task = $request->user()->tasks()->create($taskData);
 
-        return response()->json($task->load(['course', 'tags']), 201);
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $task->update([
+                'attachment_content' => base64_encode(file_get_contents($file->getRealPath())),
+                'attachment_type' => $file->getMimeType(),
+                'attachment_name' => $file->getClientOriginalName(),
+            ]);
+        }
+
+        return response()->json($task->fresh()->load(['course', 'tags']), 201);
     }
 
     public function updateTask(Request $request, Task $task)
@@ -70,9 +81,29 @@ class ApiDataController extends Controller
             'status' => 'sometimes|required|in:todo,in_progress,review,done',
             'priority' => 'sometimes|required|in:low,medium,high',
             'due_date' => 'nullable|date',
+            'attachment' => 'nullable|file|max:10240',
+            'remove_attachment' => 'nullable|in:true,false,1,0',
         ]);
 
-        $task->update($validated);
+        $taskData = collect($validated)->except(['attachment', 'remove_attachment'])->toArray();
+        $task->update($taskData);
+
+        if ($request->remove_attachment == 'true' || $request->remove_attachment == '1') {
+            $task->update([
+                'attachment_content' => null, 
+                'attachment_type' => null, 
+                'attachment_name' => null
+            ]);
+        }
+
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $task->update([
+                'attachment_content' => base64_encode(file_get_contents($file->getRealPath())),
+                'attachment_type' => $file->getMimeType(),
+                'attachment_name' => $file->getClientOriginalName(),
+            ]);
+        }
 
         return response()->json($task->fresh()->load(['course', 'tags']));
     }
