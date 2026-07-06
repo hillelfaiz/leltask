@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::get('/tasks/{task}/attachment', [TaskController::class, 'downloadAttachment'])->name('tasks.attachment');
 
     // Courses API
     Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');

@@ -12,7 +12,7 @@ class Task extends Model
     protected $fillable = [
         'user_id', 'course_id', 'title', 'description', 
         'status', 'priority', 'due_date', 'is_notified',
-        'attachment_path', 'attachment_name' // <-- Ditambahkan
+        'attachment_content', 'attachment_type', 'attachment_name'
     ];
 
     protected $casts = [
@@ -25,7 +25,7 @@ class Task extends Model
 
     public function getAttachmentUrlAttribute()
     {
-        return $this->attachment_path ? asset('storage/' . $this->attachment_path) : null;
+        return $this->attachment_content ? route('tasks.attachment', $this->id) : null;
     }
 
     public function user()

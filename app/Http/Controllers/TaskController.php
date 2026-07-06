@@ -29,12 +29,13 @@ class TaskController extends Controller
             'due_date' => $validated['due_date'] ?? null,
         ]);
 
-        // Handle File Upload
+        // Handle File Upload to Database
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('attachments', 'public');
+            $file = $request->file('attachment');
             $task->update([
-                'attachment_path' => $path,
-                'attachment_name' => $request->file('attachment')->getClientOriginalName(),
+                'attachment_content' => base64_encode(file_get_contents($file->getRealPath())),
+                'attachment_type' => $file->getMimeType(),
+                'attachment_name' => $file->getClientOriginalName(),
             ]);
         }
 
@@ -68,20 +69,21 @@ class TaskController extends Controller
         ]);
 
         // Handle menghapus file lama jika user meminta
-        if ($request->remove_attachment && $task->attachment_path) {
-            Storage::disk('public')->delete($task->attachment_path);
-            $task->update(['attachment_path' => null, 'attachment_name' => null]);
+        if ($request->remove_attachment) {
+            $task->update([
+                'attachment_content' => null, 
+                'attachment_type' => null, 
+                'attachment_name' => null
+            ]);
         }
 
         // Handle upload file baru (akan menimpa yang lama)
         if ($request->hasFile('attachment')) {
-            if ($task->attachment_path) {
-                Storage::disk('public')->delete($task->attachment_path);
-            }
-            $path = $request->file('attachment')->store('attachments', 'public');
+            $file = $request->file('attachment');
             $task->update([
-                'attachment_path' => $path,
-                'attachment_name' => $request->file('attachment')->getClientOriginalName(),
+                'attachment_content' => base64_encode(file_get_contents($file->getRealPath())),
+                'attachment_type' => $file->getMimeType(),
+                'attachment_name' => $file->getClientOriginalName(),
             ]);
         }
 
@@ -94,13 +96,25 @@ class TaskController extends Controller
             abort(403);
         }
 
-        // Hapus file fisik jika ada sebelum menghapus data dari database
-        if ($task->attachment_path) {
-            Storage::disk('public')->delete($task->attachment_path);
-        }
-
         $task->delete();
 
         return redirect()->back();
+    }
+
+    public function downloadAttachment(Request $request, Task $task)
+    {
+        if ($task->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        if (!$task->attachment_content) {
+            abort(404);
+        }
+
+        $content = base64_decode($task->attachment_content);
+
+        return response($content)
+            ->header('Content-Type', $task->attachment_type ?: 'application/octet-stream')
+            ->header('Content-Disposition', 'inline; filename="' . $task->attachment_name . '"');
     }
 }
